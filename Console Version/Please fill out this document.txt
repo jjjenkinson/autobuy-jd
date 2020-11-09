@@ -1,0 +1,8 @@
+﻿请注意所有讯息在单引号内填写
+您接收下单成功讯息的邮箱(可不填): 'chjxg3@yeah.net'
+
+您的登录cookie(请按照README.md内指南获取):
+'e2a6650a-bf7e-4ebd-96ee-0dcc94d82157'
+
+您需要自动购买的商品URL(请按照README.md内指南获取):
+'https://c0.3.cn/stocks?callback=jQuery9276119&type=getstocks&skuIds=100016129294%2C100016129312&area=17_1387_1393_43304&_=1604875692892'
