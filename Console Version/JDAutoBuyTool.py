@@ -63,7 +63,7 @@ def sendError(sendTo):
     if not re.search(mailRe, sendTo):
         return
 
-    sendFrom = '645064582@qq.com'
+    sendFrom = '841915343@qq.com'
 
     # 发信服务器
     smtp_server = 'smtp.qq.com'
@@ -77,7 +77,7 @@ def sendError(sendTo):
     # 开启发信服务, 加密传输
     server = smtplib.SMTP_SSL(host=smtp_server)
     server.connect(smtp_server, 465)
-    server.login(sendFrom, 'nkrzicfjkzznbehi')
+    server.login(sendFrom, 'hqxzxgownfyabfib')   #邮箱授权码
     server.sendmail(sendFrom, sendTo, msg.as_string())
     server.quit()
 
@@ -370,10 +370,11 @@ def buyGood(sku_id, session, logger, payment_pwd):
         return False
 
 def main(sendTo, cookies_String, url):
+    print("main函数开始运行！")
     session = requests.session()
     session.headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/531.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=1.8,application/signed-exchange;v=b3",
         "Connection": "keep-alive"
     }
 
@@ -433,9 +434,9 @@ def main(sendTo, cookies_String, url):
             time.sleep(10)
 
 
-if __name__ == '__main__':
-    sendTo = ''
-    cookies_String = ''
+if __name__ == '__main__':  #内置变量__name__表示当前模块的名字
+    sendTo = '' #邮箱
+    cookies_String = '' #用户登陆cookies
     fp = open("./Please fill out this document.txt", 'r', encoding='utf-8')
     cont = fp.read()
     pattern = re.compile("'(.*)'")
@@ -447,7 +448,9 @@ if __name__ == '__main__':
         if len(cookies_String) == 0:
             print("ERROR: Missing cookie.")
 
+    # print(contRe)
     contRe = contRe[2:]
+    # print(contRe)
 
     try:
         main(sendTo, cookies_String, contRe)
