@@ -9,19 +9,27 @@ import random
 from bs4 import BeautifulSoup
 import smtplib
 import re
+import getpass,socket
 from email.mime.text import MIMEText
 from email.header import Header
 
 import traceback
 
+
+tmp = 100
 def setLogger(logFileName, logger):
-    logger.setLevel(logging.INFO)
+    """ 创建日志文件
+    
+    
+    """
+    logger.setLevel(logging.INFO)#在logger这个记录器上记录info级别的消息
     formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
 
-    console_handler = logging.StreamHandler()
+    console_handler = logging.StreamHandler() #返回日志记录流，这里是输出在终端上
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
 
+    # 打开指定的文件并将其用作日志记录流
     file_handler = logging.handlers.RotatingFileHandler(
         logFileName, maxBytes=10485760, backupCount=5, encoding="utf-8")
     file_handler.setFormatter(formatter)
@@ -64,11 +72,13 @@ def sendError(sendTo):
         return
 
     sendFrom = '841915343@qq.com'
+    username = getpass.getuser()
+    hostname = socket.gethostname()
 
     # 发信服务器
     smtp_server = 'smtp.qq.com'
     # 邮箱正文内容, 第一个参数为内容, 第二个参数为格式(plain 为纯文本), 第三个参数为编码
-    msg = MIMEText('main()函数出错嘞!', 'plain', 'utf-8')
+    msg = MIMEText('main()函数出错嘞!(from {}.{})\n程序运行时间：{}'.format(hostname,username,time.asctime()), 'plain', 'utf-8')
 
     # 邮件头信息
     msg['From'] = Header(sendFrom)
@@ -96,11 +106,12 @@ def responseStatus(resp):
         return False
     return True
 def validateCookies(logger, session):
+    """ 验证cookies并尝试登陆 """
     for flag in range(1, 3):
         try:
             targetURL = 'https://order.jd.com/center/list.action'
             payload = {
-                'rid': str(int(time.time() * 1000)),
+                'rid': str(int(time.time() * 1000)) #时间戳
             }
             resp = session.get(url=targetURL, params=payload, allow_redirects=False)
             if resp.status_code == requests.codes.OK:
@@ -387,10 +398,13 @@ def main(sendTo, cookies_String, url):
         # 用=号分割.
         name, value = item.strip().split('=', 1)
         manual_cookies[name] = value
-
-    # print(manual_cookies)
+    # if __name__ == "__main__":
+    #     print("manual_cookies = \n",manual_cookies)
     cookiesJar = requests.utils.cookiejar_from_dict(manual_cookies, cookiejar=None, overwrite=True)
     session.cookies = cookiesJar
+    # if __name__ == "__main__":
+    #     print("session.cookies = \n",session.cookies)
+    #     sys.exit("测试结束！")
 
     payment_pwd = ''
     flag = 1
@@ -447,12 +461,10 @@ if __name__ == '__main__':  #内置变量__name__表示当前模块的名字
         print("Please confirm the email address: %s" % sendTo)
         if len(cookies_String) == 0:
             print("ERROR: Missing cookie.")
-
     # print(contRe)
     contRe = contRe[2:]
     # print(contRe)
-
     try:
         main(sendTo, cookies_String, contRe)
     except Exception:
-        sendError(sendTo)
+        sendError(sendTo) #有异常就发消息到邮箱
