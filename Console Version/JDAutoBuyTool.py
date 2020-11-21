@@ -16,7 +16,6 @@ from email.header import Header
 import traceback
 
 
-tmp = 100
 def setLogger(logFileName, logger):
     """ 创建日志文件
     
@@ -109,7 +108,7 @@ def validateCookies(logger, session):
     """ 验证cookies并尝试登陆 """
     for flag in range(1, 3):
         try:
-            targetURL = 'https://order.jd.com/center/list.action'
+            targetURL = 'https://order.jd.com/center/list.action' #这是京东订单页面
             payload = {
                 'rid': str(int(time.time() * 1000)) #时间戳
             }
@@ -131,7 +130,7 @@ def getUsername(logger, session):
     userName_Url = 'https://passport.jd.com/new/helloService.ashx?callback=jQuery339448&_=' + str(
         int(time.time() * 1000))
     session.headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
         "Referer": "https://order.jd.com/center/list.action",
         "Connection": "keep-alive"
@@ -160,7 +159,7 @@ def cancelSelectCartItem(session):
 def cart_detail(session, logger, isOutput=False):
     url = 'https://cart.jd.com/cart.action'
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
         "Referer": "https://order.jd.com/center/list.action",
         "Host": "cart.jd.com",
@@ -212,7 +211,7 @@ def change_item_num_in_cart(sku_id, vender_id, num, p_type, target_id, promo_id,
         # 'locationId'
     }
     session.headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
         "Referer": "https://cart.jd.com/cart",
         "Connection": "keep-alive"
@@ -248,7 +247,7 @@ def get_checkout_page_detail(session, logger):
         'rid': str(int(time.time() * 1000)),
     }
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
         "Referer": "https://cart.jd.com/cart.action",
         "Connection": "keep-alive",
@@ -317,7 +316,7 @@ def submit_order(risk_control, session, logger, payment_pwd):
         data['submitOrderParam.payPassword'] = encrypt_payment_pwd(payment_pwd)
 
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
         "Referer": "http://trade.jd.com/shopping/order/getOrderInfo.action",
         "Connection": "keep-alive",
@@ -348,9 +347,12 @@ def submit_order(risk_control, session, logger, payment_pwd):
         return False
 
 
-def item_removed(sku_id):
+def item_removed(sku_id):        
+    """ 
+        判断商品是否下架，若商品未下架，返回真 
+    """ 
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
         "Referer": "http://trade.jd.com/shopping/order/getOrderInfo.action",
         "Connection": "keep-alive",
@@ -384,7 +386,7 @@ def main(sendTo, cookies_String, url):
     print("main函数开始运行！")
     session = requests.session()
     session.headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/531.36",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=1.8,application/signed-exchange;v=b3",
         "Connection": "keep-alive"
     }
@@ -399,11 +401,12 @@ def main(sendTo, cookies_String, url):
         name, value = item.strip().split('=', 1)
         manual_cookies[name] = value
     # if __name__ == "__main__":
-    #     print("manual_cookies = \n",manual_cookies)
+        # print("manual_cookies = \n",manual_cookies)
     cookiesJar = requests.utils.cookiejar_from_dict(manual_cookies, cookiejar=None, overwrite=True)
     session.cookies = cookiesJar
     # if __name__ == "__main__":
     #     print("session.cookies = \n",session.cookies)
+    #     print("manual_coolies = {}\n".format(manual_cookies))
     #     sys.exit("测试结束！")
 
     payment_pwd = ''
@@ -415,18 +418,25 @@ def main(sendTo, cookies_String, url):
                 getUsername(logger, session)
             checkSession = requests.Session()
             checkSession.headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36",
+                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36",
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
                 "Connection": "keep-alive"
             }
             logger.info('第' + str(flag) + '次 查询...')
             flag += 1
             for i in url:
-                # 商品url
-                skuId = i.split('skuId=')[1].split('&')[0]
+                # 商品url,skuid是商品编号
+                skuId = i.split('skuIds=')[1].split('%2C')[2]
                 skuidUrl = 'https://item.jd.com/' + skuId + '.html'
                 response = checkSession.get(i)
-                if (response.text.find('无货') > 0):
+                #一个商品url中实际上有一种商品的多种不同规格的货号
+                tmp = response.text.split(str(skuId))[1]
+                m = tmp.find('{')
+                n = tmp.find('}')
+                tmp = tmp[m:n+1]
+                # print(skuId,tmp)
+                # sys.exit('测试结束！')
+                if (tmp.find('无货') > 0):
                     logger.info('[%s]商品无货.', skuId)
                 else:
                     if item_removed(skuId):
@@ -448,7 +458,7 @@ def main(sendTo, cookies_String, url):
             time.sleep(10)
 
 
-if __name__ == '__main__':  #内置变量__name__表示当前模块的名字
+if __name__ == '__main__':  #当一个模块被直接运行时，内置变量__name__==‘__main__’,
     sendTo = '' #邮箱
     cookies_String = '' #用户登陆cookies
     fp = open("./Please fill out this document.txt", 'r', encoding='utf-8')
@@ -461,9 +471,8 @@ if __name__ == '__main__':  #内置变量__name__表示当前模块的名字
         print("Please confirm the email address: %s" % sendTo)
         if len(cookies_String) == 0:
             print("ERROR: Missing cookie.")
-    # print(contRe)
-    contRe = contRe[2:]
-    # print(contRe)
+    contRe = contRe[2:] #商品url
+    print(contRe)
     try:
         main(sendTo, cookies_String, contRe)
     except Exception:
